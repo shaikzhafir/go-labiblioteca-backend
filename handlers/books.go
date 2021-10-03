@@ -10,20 +10,23 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type HelloHandler struct {
+type BookHandler struct {
 	Message string
 }
 
-// Hello this is just to return some message
-func Hello() *HelloHandler {
-	return &HelloHandler{Message: "POOP"}
-}
 
-func (h *HelloHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (b *BookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//convert the string message to bytes
 	var err error
 	//sql.Open creates a pointer to Db (*Db)
 	DbConn := database.ConnectDatabase()
+
+	switch r.Method {
+	case http.MethodGet:
+		books := b.getBook(w)
+		fmt.Println(books)
+		
+	}
 	rows, err := DbConn.Query("SELECT * FROM books;")
 	if err != nil {
 		log.Fatal(err)
@@ -39,4 +42,8 @@ func (h *HelloHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		fmt.Println(bks)
 
 	}
+}
+
+func (b *BookHandler) getBook(w http.ResponseWriter) string{
+	return "haha"
 }
