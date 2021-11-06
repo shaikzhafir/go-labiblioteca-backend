@@ -1,26 +1,34 @@
+//the idea of this package is to create connection to DB
+
 package database
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
 
-var DbConn *sql.DB
+var db *sql.DB
 
 func ConnectDatabase() *sql.DB {
 	var err error
-	var faggot string = "midget"
 	//sql.Open creates a pointer to Db (*Db)
-	DbConn, err := sql.Open("postgres", "postgres://postgres:poop@localhost/bookdb?sslmode=disable")
+	//DATABASE_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
+	db, err := sql.Open("postgres", fmt.Sprintf(
+		"user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_DB")))
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(faggot)
-	err = DbConn.Ping()
+	err = db.Ping()
 
 	if err != nil {
 		panic(err)
@@ -28,6 +36,6 @@ func ConnectDatabase() *sql.DB {
 
 	fmt.Println("Successfully connected")
 
-	return DbConn
+	return db
 
 }

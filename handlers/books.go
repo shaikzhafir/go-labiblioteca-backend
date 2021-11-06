@@ -2,18 +2,19 @@ package handlers
 
 import (
 	"fmt"
-	"go-labiblioteca-backend/data"
 	"go-labiblioteca-backend/database"
+	"go-labiblioteca-backend/models"
 	"log"
 	"net/http"
-
-	_ "github.com/lib/pq"
 )
 
-type BookHandler struct {
-	Message string
+type BookStore struct {
+	bookList []string
+	authors  []string
 }
 
+type BookHandler struct {
+}
 
 func (b *BookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//convert the string message to bytes
@@ -25,17 +26,17 @@ func (b *BookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		books := b.getBook(w)
 		fmt.Println(books)
-		
+
 	}
 	rows, err := DbConn.Query("SELECT * FROM books;")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	bks := make([]data.Book, 0)
+	bks := make([]models.Book, 0)
 	for rows.Next() {
-		bk := data.Book{}
-		if err = rows.Scan(&bk.Isbn, &bk.Title, &bk.Description, &bk.Author, &bk.Image); err != nil {
+		bk := models.Book{}
+		if err = rows.Scan(&bk.Isbn, &bk.Title, &bk.Description, &bk.Author, &bk.ImageURL); err != nil {
 			log.Fatal(err)
 		}
 		bks = append(bks, bk)
@@ -44,6 +45,18 @@ func (b *BookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (b *BookHandler) getBook(w http.ResponseWriter) string{
+func (b *BookHandler) getBook(w http.ResponseWriter) string {
 	return "haha"
+}
+
+func (b *BookHandler) postBook(w http.ResponseWriter, r *http.Request) {
+	//logic for post
+}
+
+func (b *BookHandler) updateBook(w http.ResponseWriter, r *http.Request) {
+	//logic for update
+}
+
+func (b *BookHandler) deleteBook(w http.ResponseWriter, r *http.Request) {
+	//logic for delete
 }
