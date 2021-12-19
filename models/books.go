@@ -37,3 +37,8 @@ func (m BookModel) CreateBookTable() {
 	}
 	log.Printf("database %s created/alr created", tableName)
 }
+
+
+func (m BookModel) InsertBook(book Book){
+	
+}

@@ -8,12 +8,13 @@ import (
 	"log"
 	"os"
 
+
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
 
-func ConnectDatabase() *sql.DB {
+func ConnectDatabase() (*sql.DB, error) {
 	var err error
 	//sql.Open creates a pointer to Db (*Db)
 	//DATABASE_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
@@ -36,6 +37,6 @@ func ConnectDatabase() *sql.DB {
 
 	fmt.Println("Successfully connected")
 
-	return db
+	return db,nil
 
 }
