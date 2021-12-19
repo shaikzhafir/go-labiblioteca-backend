@@ -35,7 +35,7 @@ func main() {
 	}
 	//initialises the db if doesnt exist
 	env.books.CreateBookTable()
-	
+
 	handler := handlers.BookHandler{DB : db}
 	//test ur env variables lol
 	/* 	fmt.Println("Shell:", os.Getenv("TEST"))
@@ -44,7 +44,7 @@ func main() {
 	*/
 	
 	http.HandleFunc("/books", handler.ServeHTTP)
-	err = http.ListenAndServe(":4000", nil)
+	err = http.ListenAndServe("localhost:4000", nil)
 	if err != nil {
 		log.Fatalln("Error in listening to port")
 	}

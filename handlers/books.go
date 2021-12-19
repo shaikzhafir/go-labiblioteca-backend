@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"encoding/json"
+	"io/ioutil"
+	"strings"
 )
 
 type BookStore struct {
@@ -78,11 +80,65 @@ func (b *BookHandler) postBook(w http.ResponseWriter, r *http.Request) {
 
 func (b *BookHandler) updateBook(w http.ResponseWriter, r *http.Request) {
 	//logic for update
+	//extract isbn first 
+	isbn := r.URL.Query().Get("isbn")
+	book,err := unmarshalBook(r)
+	var arg []interface{} 
+	qry,args,err := updateStatement(isbn,arg,book)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	result,err := b.DB.Exec(qry,args...)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	rowsAffected,err := result.RowsAffected()
+	fmt.Fprintf(w, "Book %s updated successfully (%d row affected)\n", isbn, rowsAffected)
+	//
+}
+
+func unmarshalBook(r *http.Request)(book models.Book,err error){
+	data,_ := ioutil.ReadAll(r.Body)
+	err = json.Unmarshal(data,&book)
+	return book,err
+}
+
+func updateStatement(isbn string,argArray []interface{},updateData models.Book)(string,[]interface{},error){
+	var queryString string
+	i := 2 
+	argArray = append(argArray,isbn)
+	if len(updateData.Title) > 0{
+		queryString += fmt.Sprintf(`title=$%d,`,i)
+		argArray = append(argArray,updateData.Title)
+		i++
+	}
+	if len(updateData.Description) > 0{
+		queryString += fmt.Sprintf(`description=$%d,`,i)
+		argArray = append(argArray,updateData.Description)
+		i++
+	}
+	if len(updateData.Author) > 0{
+		queryString += fmt.Sprintf(`author=$%d,`,i)
+		argArray = append(argArray,updateData.Author)
+		i++
+	}
+	if len(updateData.ImageURL)  > 0{
+		queryString += fmt.Sprintf(`imageURL=$%d,`,i)
+		argArray = append(argArray,updateData.ImageURL)
+		i++
+	}
+	
+	qry := fmt.Sprintf(`UPDATE books SET %s WHERE isbn=$1`,strings.TrimSuffix(queryString,","))
+	fmt.Println(qry)
+	fmt.Printf(`%v+`,argArray)
+	return qry,argArray,nil
+
+
 }
 
 func (b *BookHandler) deleteBook(w http.ResponseWriter, r *http.Request) {
-	//logic for delete
-
 	//extract isbn first 
 	isbn := r.URL.Query().Get("isbn")
 
