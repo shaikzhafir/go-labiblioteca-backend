@@ -1,4 +1,4 @@
-//the idea of this package is to create connection to DB
+//the idea of this package is to create connection to DB, reuse the same instance in main.go
 
 package database
 
@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
 
 	_ "github.com/lib/pq"
 )
@@ -37,6 +36,6 @@ func ConnectDatabase() (*sql.DB, error) {
 
 	fmt.Println("Successfully connected")
 
-	return db,nil
+	return db, nil
 
 }
