@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	_ "fmt"
-	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 	"go-labiblioteca-backend/database"
 	"go-labiblioteca-backend/handlers"
@@ -22,10 +21,6 @@ func main() {
 }
 
 func run() error {
-	err := godotenv.Load("../../.env")
-	if err != nil {
-		return errors.Wrap(err, "read failed")
-	}
 	//init the db
 	db, err := database.ConnectDatabase()
 	if err != nil {
@@ -43,7 +38,7 @@ func run() error {
 	*/
 
 	http.HandleFunc("/books", handler.ServeHTTP)
-	err = http.ListenAndServe("localhost:4000", nil)
+	err = http.ListenAndServe("0.0.0.0:4000", nil)
 	if err != nil {
 		return errors.Wrap(err, "error when listening to server")
 	}
