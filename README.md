@@ -5,10 +5,21 @@ using docker to setup db
 steps:
 
 1. install docker desktop
-2. create a .env file in the root folder of your project. use the keys from sample and set your own values
-3. while in root directory, run docker-compose up -d to run postgres db in docker
-4. cd over to cmd/main-server and run 'go run main.go'
-5. test at localhost:4000/books
+2. create a setenv.bat (Windows) file in the root folder of your project
+
+//contents of setenv.bat
+
+set POSTGRES_USER=<pgusername>
+set POSTGRES_PASSWORD=<password>
+set POSTGRES_DB=<dbname>
+set POSTGRES_HOST=<your-ip-address>
+set POSTGRES_PORT=5432
+
+3. Run setenv.bat in cmd to set ur env variables in environment
+4. Run docker build . -t my-images/biblioteca from same directory of Dockerfile. 
+   This is to build the image to be used in docker-compose
+4. Run docker-compose up -d 
+5. Test at localhost:4000/books
 
 
 ## Structure of code  (starting from base to the router)
