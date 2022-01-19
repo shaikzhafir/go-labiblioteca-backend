@@ -61,7 +61,7 @@ func (repository BookRepository) GetBooks() ([]domain.Book, error) {
 
 func (repository BookRepository) InsertBook(book *domain.Book) (int64, error) {
 	//TODO direct interaction with db layer done here
-	result, err := repository.DB.Exec("INSERT INTO books(isbn, title, description, author, imageURL) VALUES($1, $2, $3, $4, $5);", book.Isbn, book.Title, book.Description, book.Author, book.ImageURL)
+	result, err := repository.DB.Exec("INSERT INTO books (isbn, title, description, author, imageURL) VALUES ($1, $2, $3, $4, $5);", book.Isbn, book.Title, book.Description, book.Author, book.ImageURL)
 	if err != nil {
 		return 0, err
 	}

@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1270b6e0-37e2-44e5-a2e4-726692af1061" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/main-server/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/bookHandler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/bookHandler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlers/bookHandler_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/bookHandler_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/bookRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/repository/bookRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository/bookRepository_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/repository/bookRepository_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +67,19 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoLibrariesConfigurableProvider" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Test.TestBookRepository_InsertBook_Error in go-labiblioteca-backend/repository">
+    <configuration name="TestBookRepository_InsertBook in go-labiblioteca-backend/repository (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-labiblioteca-backend" />
+      <working_directory value="$PROJECT_DIR$/repository" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="go-labiblioteca-backend/repository" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestBookRepository_InsertBook\E$" />
+      <method v="2" />
+    </configuration>
     <configuration name="TestBookRepository_InsertBook in go-labiblioteca-backend/repository" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="go-labiblioteca-backend" />
       <working_directory value="$PROJECT_DIR$/repository" />
@@ -81,8 +92,35 @@
       <pattern value="^\QTestBookRepository_InsertBook\E$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestBookRepository_InsertBook_Error in go-labiblioteca-backend/repository" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-labiblioteca-backend" />
+      <working_directory value="$PROJECT_DIR$/repository" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="go-labiblioteca-backend/repository" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestBookRepository_InsertBook_Error\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestBookRepository_InsertBook_Ok in go-labiblioteca-backend/repository" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="go-labiblioteca-backend" />
+      <working_directory value="$PROJECT_DIR$/repository" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="go-labiblioteca-backend/repository" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestBookRepository_InsertBook_Ok\E$" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestBookRepository_InsertBook_Error in go-labiblioteca-backend/repository" />
+        <item itemvalue="Go Test.TestBookRepository_InsertBook_Ok in go-labiblioteca-backend/repository" />
+        <item itemvalue="Go Test.TestBookRepository_InsertBook in go-labiblioteca-backend/repository (1)" />
         <item itemvalue="Go Test.TestBookRepository_InsertBook in go-labiblioteca-backend/repository" />
       </list>
     </recent_temporary>
