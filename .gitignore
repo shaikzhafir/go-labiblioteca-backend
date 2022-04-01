@@ -16,3 +16,4 @@
 *.env
 /data
 setenv.bat
+setenv.sh
