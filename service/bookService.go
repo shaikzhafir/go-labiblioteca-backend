@@ -6,14 +6,12 @@ import (
 	"go-labiblioteca-backend/repository"
 )
 
-//this is to show the methods that are available?
-/* type BookRepository interface {
+type BookRepository interface {
 	GetBooks() ([]domain.Book, error)
-	AddBook(domain.Book)(string, error)
-	UpdateBook(domain.Book)(string,error)
-	DeleteBook(string)(string,error)
+	AddBook(domain.Book) (string, error)
+	UpdateBook(domain.Book) (string, error)
+	DeleteBook(string) (string, error)
 }
-*/
 
 type BookService struct {
 	repository *repository.BookRepository

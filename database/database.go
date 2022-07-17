@@ -15,6 +15,7 @@ var db *sql.DB
 
 func ConnectDatabase() (*sql.DB, error) {
 	var err error
+	getEnv()
 	//sql.Open creates a pointer to Db (*Db)
 	//DATABASE_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
 	db, err := sql.Open("postgres", fmt.Sprintf(
@@ -38,4 +39,8 @@ func ConnectDatabase() (*sql.DB, error) {
 
 	return db, nil
 
+}
+
+func getEnv() {
+	fmt.Printf("password is %s", os.Getenv("POSTGRES_PASSWORD"))
 }

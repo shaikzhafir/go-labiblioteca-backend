@@ -13,15 +13,15 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:5432"
-  biblioteca:
-    container_name: biblioteca_golang
-    image: my-images/biblioteca:latest #docker build . -t my-images/biblioteca
-    restart: always
-    ports:
-      - "4000:4000"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+#  biblioteca:
+#    container_name: biblioteca_golang
+#    image: my-images/biblioteca:latest #docker build . -t my-images/biblioteca
+#    restart: always
+#    ports:
+#      - "4000:4000"
+#    environment:
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+#      POSTGRES_DB: ${POSTGRES_DB}
+#      POSTGRES_HOST: ${POSTGRES_HOST}
+#      POSTGRES_PORT: ${POSTGRES_PORT}

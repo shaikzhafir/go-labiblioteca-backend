@@ -17,3 +17,5 @@
 /data
 setenv.bat
 setenv.sh
+
+.idea

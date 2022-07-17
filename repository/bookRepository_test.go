@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 	"go-labiblioteca-backend/domain"
 	"regexp"

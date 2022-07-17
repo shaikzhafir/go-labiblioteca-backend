@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pb;
+
+import "book.proto";
+
+option go_package = "go-labiblioteca-backend/pb";
+
+message GetBookByIDRequest {
+  string isbn = 1;
+}
+
+message GetBookByIDResponse {
+  Book book = 1;
+}
