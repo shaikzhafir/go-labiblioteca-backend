@@ -3,22 +3,21 @@ package service
 import (
 	_ "fmt"
 	"go-labiblioteca-backend/domain"
-	"go-labiblioteca-backend/repository"
 )
 
 type BookRepository interface {
 	GetBooks() ([]domain.Book, error)
-	AddBook(domain.Book) (string, error)
-	UpdateBook(domain.Book) (string, error)
-	DeleteBook(string) (string, error)
+	InsertBook(*domain.Book) (int64, error)
+	UpdateBook(domain.Book, string) (int64, error)
+	DeleteBook(string) (int64, error)
 }
 
 type BookService struct {
-	repository *repository.BookRepository
+	repository BookRepository
 }
 
-//this is used to init in main.go
-func NewBookService(repository *repository.BookRepository) *BookService {
+// this is used to init in main.go
+func NewBookService(repository BookRepository) *BookService {
 	return &BookService{repository: repository}
 }
 

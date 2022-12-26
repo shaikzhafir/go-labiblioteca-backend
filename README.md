@@ -1,6 +1,6 @@
 trying out writing go backend with postgres db
 
-using rancher desktop for local development
+using rancher desktop for local development (this part is really optional, just try setting up whichever postgres instance u want to get it running)
 
 steps:
 

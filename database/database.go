@@ -11,8 +11,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-
 func ConnectDatabase() (*sql.DB, error) {
 	var err error
 	getEnv()
@@ -42,5 +40,6 @@ func ConnectDatabase() (*sql.DB, error) {
 }
 
 func getEnv() {
+	fmt.Printf("postgres uer is %+v", os.Getenv("POSTGRES_USER"))
 	fmt.Printf("password is %s", os.Getenv("POSTGRES_PASSWORD"))
 }
