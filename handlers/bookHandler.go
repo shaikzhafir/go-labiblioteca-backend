@@ -5,16 +5,11 @@ import (
 	"fmt"
 	"go-labiblioteca-backend/domain"
 	"go-labiblioteca-backend/service"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	_ "strings"
 )
-
-type BookStore struct {
-	bookList []string
-	authors  []string
-}
 
 type BookHandler struct {
 	service *service.BookService
@@ -86,15 +81,9 @@ func (b *BookHandler) updateBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func unmarshalBook(r *http.Request) (book domain.Book, err error) {
-	data, _ := ioutil.ReadAll(r.Body)
+	data, _ := io.ReadAll(r.Body)
 	err = json.Unmarshal(data, &book)
 	return book, err
-}
-
-// a general parser that takes in variables of type interface{}
-func dataParser(requestBody interface{}, request []byte) (err error) {
-	err = json.Unmarshal(request, &requestBody)
-	return err
 }
 
 func (b *BookHandler) deleteBook(w http.ResponseWriter, r *http.Request) {

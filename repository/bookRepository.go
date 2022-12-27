@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//this struct is connection to the db
+// BookRepository this struct is connection to the db
 type BookRepository struct {
 	DB *sql.DB
 }
@@ -52,7 +52,6 @@ func (repository BookRepository) GetBooks() ([]domain.Book, error) {
 			log.Fatal(err)
 		}
 		bks = append(bks, bk)
-		fmt.Println(bks)
 	}
 
 	return bks, nil
@@ -71,6 +70,22 @@ func (repository BookRepository) InsertBook(book *domain.Book) (int64, error) {
 	}
 
 	return rowsAffected, nil
+
+}
+
+func (repository BookRepository) InsertManyBooks(books *[]domain.Book) error {
+	//TODO do a insert many instead of this for range
+	for _, book := range *books {
+		result, err := repository.DB.Exec("INSERT INTO books (isbn, title, description, author, imageURL) VALUES ($1, $2, $3, $4, $5);", book.Isbn, book.Title, book.Description, book.Author, book.ImageURL)
+		if err != nil {
+			return err
+		}
+		_, err = result.RowsAffected()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 
 }
 
@@ -116,11 +131,9 @@ func updateStatement(isbn string, argArray []interface{}, updateData domain.Book
 	if len(updateData.ImageURL) > 0 {
 		queryString += fmt.Sprintf(`imageURL=$%d,`, i)
 		argArray = append(argArray, updateData.ImageURL)
-		i++
 	}
 
 	qry := fmt.Sprintf(`UPDATE books SET %s WHERE isbn=$1`, strings.TrimSuffix(queryString, ","))
-	fmt.Println(qry)
 	fmt.Printf(`%v+`, argArray)
 	return qry, argArray, nil
 }

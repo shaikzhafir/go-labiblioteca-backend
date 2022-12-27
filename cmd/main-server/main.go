@@ -1,23 +1,19 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	_ "fmt"
-	"github.com/pkg/errors"
 	"go-labiblioteca-backend/database"
 	"go-labiblioteca-backend/handlers"
-	"go-labiblioteca-backend/pb"
 	"go-labiblioteca-backend/repository"
 	"go-labiblioteca-backend/service"
-	"google.golang.org/grpc"
-	"log"
-	"net"
 	"net/http"
 	"os"
+
+	"github.com/pkg/errors"
 )
 
-//adds the methods avail in bookModel to Env struct
+// adds the methods avail in bookModel to Env struct
 func main() {
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stdout, "main exit due to %s \n", err)
@@ -26,10 +22,10 @@ func main() {
 }
 
 // server is used to implement helloworld.GreeterServer.
-type server struct {
+/* type server struct {
 	pb.UnimplementedBookRepoServer
 }
-
+*/
 func run() error {
 	//init the db
 	db, err := database.ConnectDatabase()
@@ -47,8 +43,8 @@ func run() error {
 	   	test := os.Getenv("TEST")
 	   	fmt.Println(test)
 	*/
-
-	var (
+	// this is some useless grpc stuff
+	/* var (
 		port = flag.Int("port", 50051, "The server port")
 	)
 	flag.Parse()
@@ -61,7 +57,7 @@ func run() error {
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
-	}
+	} */
 
 	http.HandleFunc("/books", handler.ServeHTTP)
 	err = http.ListenAndServe("0.0.0.0:4000", nil)
