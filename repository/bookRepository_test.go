@@ -74,3 +74,41 @@ func TestBookRepository_InsertManyBooks(t *testing.T) {
 		t.Errorf("there were unfulfilled expectations: %s", err)
 	}
 }
+
+func TestBookRepository_DeleteBook(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+
+	query := "DELETE FROM books WHERE isbn = $1"
+	mock.ExpectExec(regexp.QuoteMeta(query)).WithArgs(book.Isbn).WillReturnResult(sqlmock.NewResult(1, 1))
+	defer db.Close()
+
+	// execute our actual logic
+	repo := BookRepository{db}
+	deleteBook, err := repo.DeleteBook(book.Isbn)
+	assert.NoError(t, err)
+	assert.Equal(t, deleteBook, int64(1))
+}
+
+func TestBookRepository_UpdateBook(t *testing.T) {
+	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	query := "UPDATE books SET title=$2,description=$3,author=$4,imageURL=$5 WHERE isbn=$1"
+	t.Logf("the query is %s\n", query)
+	mock.ExpectExec(query).WithArgs(book.Isbn, book.Title, book.Description, book.Author, book.ImageURL).WillReturnResult(sqlmock.NewResult(1, 1))
+	defer db.Close()
+
+	// execute our actual logic
+	repo := BookRepository{db}
+	updateBook, err := repo.UpdateBook(*book, book.Isbn)
+	assert.NoError(t, err)
+	assert.Equal(t, updateBook, int64(1))
+}
+
+func TestBookRepository_InsertBook(t *testing.T) {
+
+}

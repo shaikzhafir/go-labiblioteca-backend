@@ -134,7 +134,6 @@ func updateStatement(isbn string, argArray []interface{}, updateData domain.Book
 	}
 
 	qry := fmt.Sprintf(`UPDATE books SET %s WHERE isbn=$1`, strings.TrimSuffix(queryString, ","))
-	fmt.Printf(`%v+`, argArray)
 	return qry, argArray, nil
 }
 
