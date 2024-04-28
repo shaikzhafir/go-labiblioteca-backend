@@ -3,60 +3,69 @@
 package main
 
 import (
-	"go-labiblioteca-backend/database"
-	"go-labiblioteca-backend/domain"
-	"go-labiblioteca-backend/repository"
+	"context"
+	"labiblioteca/database"
+	"labiblioteca/sqlcgen"
 	"log"
 )
 
-var sampleBooks = []domain.Book{
+var sampleBooks = []sqlcgen.InsertBookParams{
 	{
 		Isbn:        "random isbn",
 		Title:       "asdasd",
 		Description: "asdasd",
 		Author:      "asd",
-		ImageURL:    "asdasd",
+		ImageUrl:    "asd",
 	},
 	{
-		Isbn:        "asd",
-		Title:       "asd",
-		Description: "weqwe",
-		Author:      "qweqwe",
-		ImageURL:    "qweqwe",
+		Isbn:        "random isbn",
+		Title:       "asdasd",
+		Description: "asdasd",
+		Author:      "asd",
+		ImageUrl:    "asd",
 	},
 	{
-		Isbn:        "qweqweqwe",
-		Title:       "qweqwe",
-		Description: "qweqwe",
-		Author:      "qwe",
-		ImageURL:    "qwe",
+		Isbn:        "random isbn",
+		Title:       "asdasd",
+		Description: "asdasd",
+		Author:      "asd",
+		ImageUrl:    "asd",
 	},
 	{
-		Isbn:        "zxczxc",
-		Title:       "zxczxc",
-		Description: "zxczxc",
-		Author:      "zxczxc",
-		ImageURL:    "zxczxc",
+		Isbn:        "random isbn",
+		Title:       "asdasd",
+		Description: "asdasd",
+		Author:      "asd",
+		ImageUrl:    "asd",
 	},
 	{
-		Isbn:        "cvbcvb",
-		Title:       "cvbcvb",
-		Description: "cvbcvb",
-		Author:      "cvbcvb",
-		ImageURL:    "cvbcvb",
+		Isbn:        "random isbn",
+		Title:       "asdasd",
+		Description: "asdasd",
+		Author:      "asd",
+		ImageUrl:    "asd",
 	},
 }
 
 func main() {
+	ctx := context.Background()
 	db, err := database.ConnectDatabase()
 	if err != nil {
 		log.Fatalf("error connecting to db %s", err)
 	}
-	repo := repository.NewBookRepository(db)
-	repo.CreateBookTable()
-	err = repo.InsertManyBooks(&sampleBooks)
+
+	sqlc := sqlcgen.New(db)
+	// create tables if not exists
+	result, err := db.ExecContext(ctx, "CREATE TABLE IF NOT EXISTS books (id INTEGER PRIMARY KEY, isbn TEXT, title TEXT, description TEXT, author TEXT, image_url TEXT);")
 	if err != nil {
-		log.Fatalf("books not seeded successfully, error occured %s", err)
+		log.Fatalf("error creating table %s", err)
 	}
-	log.Printf("database successfully seeded\n")
+	log.Println(result)
+	for _, book := range sampleBooks {
+
+		err = sqlc.InsertBook(ctx, book)
+		if err != nil {
+			log.Fatalf("error inserting book %s", err)
+		}
+	}
 }

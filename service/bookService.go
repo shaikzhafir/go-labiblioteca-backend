@@ -1,54 +1,40 @@
 package service
 
 import (
+	"context"
 	_ "fmt"
-	"go-labiblioteca-backend/domain"
+	"labiblioteca/sqlcgen"
 )
 
-type BookRepository interface {
-	GetBooks() ([]domain.Book, error)
-	InsertBook(*domain.Book) (int64, error)
-	UpdateBook(domain.Book, string) (int64, error)
-	DeleteBook(string) (int64, error)
-}
-
 type BookService struct {
-	repository BookRepository
+	sqlcgen sqlcgen.Queries
 }
 
 // this is used to init in main.go
-func NewBookService(repository BookRepository) *BookService {
-	return &BookService{repository: repository}
+func NewBookService(sqlcgen sqlcgen.Queries) *BookService {
+	return &BookService{sqlcgen: sqlcgen}
 }
 
-func (service *BookService) GetBooks() ([]domain.Book, error) {
-	bks, err := service.repository.GetBooks()
-	if err != nil {
-		return nil, err
-	}
-	return bks, err
+func (service *BookService) GetBooks(ctx context.Context) ([]sqlcgen.Book, error) {
+	return service.sqlcgen.ListBooks(ctx)
 }
 
-func (service *BookService) AddBook(book *domain.Book) (int64, error) {
-	rowsAffected, err := service.repository.InsertBook(book)
-	if err != nil {
-		return 0, err
-	}
-	return rowsAffected, nil
+func (service *BookService) AddBook(ctx context.Context, insertParams *sqlcgen.InsertBookParams) error {
+	return service.sqlcgen.InsertBook(ctx, *insertParams)
 }
 
-func (service *BookService) DeleteBook(isbn string) (int64, error) {
-	rowsAffected, err := service.repository.DeleteBook(isbn)
-	if err != nil {
-		return 0, err
-	}
-	return rowsAffected, nil
+func (service *BookService) DeleteBook(ctx context.Context, id int64) error {
+	return service.sqlcgen.DeleteBook(ctx, id)
 }
 
-func (service *BookService) UpdateBook(book domain.Book, isbn string) (int64, error) {
-	rowsAffected, err := service.repository.UpdateBook(book, isbn)
-	if err != nil {
-		return 0, err
-	}
-	return rowsAffected, nil
+func (service *BookService) UpdateBook(ctx context.Context, updateParams *sqlcgen.UpdateBookParams) error {
+	return service.sqlcgen.UpdateBook(ctx, *updateParams)
+}
+
+func (service *BookService) GetBooksByAuthor(ctx context.Context, author string) ([]sqlcgen.Book, error) {
+	return service.sqlcgen.GetBooksByAuthor(ctx, author)
+}
+
+func (service *BookService) GetBookByID(ctx context.Context, id int64) (sqlcgen.Book, error) {
+	return service.sqlcgen.GetBookByID(ctx, id)
 }

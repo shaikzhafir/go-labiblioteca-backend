@@ -3,11 +3,13 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"go-labiblioteca-backend/domain"
-	"go-labiblioteca-backend/service"
 	"io"
+	"labiblioteca/domain"
+	"labiblioteca/service"
+	"labiblioteca/sqlcgen"
 	"log"
 	"net/http"
+	"strconv"
 	_ "strings"
 )
 
@@ -20,64 +22,87 @@ func NewBookHandler(service *service.BookService) BookHandler {
 	return BookHandler{service: service}
 }
 
-func (b *BookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		b.getBook(w)
-	case http.MethodPost:
-		b.postBook(w, r)
-	case http.MethodPut:
-		b.updateBook(w, r)
-	case http.MethodDelete:
-		b.deleteBook(w, r)
-	}
-
-}
-
-func (b *BookHandler) getBook(w http.ResponseWriter) {
-	bks, err := b.service.GetBooks()
-	if err != nil {
-		fmt.Println("haha")
-	}
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(bks); err != nil {
-		log.Println(err)
+func (b *BookHandler) GetBooks() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("get books")
+		bks, err := b.service.GetBooks(r.Context())
+		if err != nil {
+			fmt.Println("haha")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(bks); err != nil {
+			log.Println(err)
+		}
 	}
 }
 
-func (b *BookHandler) postBook(w http.ResponseWriter, r *http.Request) {
-	var book domain.Book
-	err := json.NewDecoder(r.Body).Decode(&book)
-	//handle error for decoding
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+func (b *BookHandler) GetBookByID() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//extract id first
+		idString := r.PathValue("id")
+		// convert to int
+		id, err := strconv.ParseInt(idString, 10, 64)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		bks, err := b.service.GetBookByID(r.Context(), id)
+		if err != nil {
+			fmt.Println("haha")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(bks); err != nil {
+			log.Println(err)
+		}
 	}
-
-	_, err = b.service.AddBook(&book)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	fmt.Fprintf(w, "Book %s created successfully", book.Title)
 }
 
-func (b *BookHandler) updateBook(w http.ResponseWriter, r *http.Request) {
-	//extract isbn first
-	isbn := r.URL.Query().Get("isbn")
-	book, err := unmarshalBook(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+func (b *BookHandler) InsertBook() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var insertParams sqlcgen.InsertBookParams
+		err := json.NewDecoder(r.Body).Decode(&insertParams)
+		//handle error for decoding
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		fmt.Printf("insert params %v", insertParams)
+		err = b.service.AddBook(r.Context(), &insertParams)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		fmt.Fprintf(w, "Book %s created successfully", insertParams.Title)
 	}
-	rowsAffected, err := b.service.UpdateBook(book, isbn)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+}
+
+func (b *BookHandler) UpdateBook() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//extract id first
+		idString := r.PathValue("id")
+		// convert to int
+		id, err := strconv.ParseInt(idString, 10, 64)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		book, err := unmarshalBook(r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		err = b.service.UpdateBook(r.Context(), &sqlcgen.UpdateBookParams{
+			Isbn:        book.Isbn,
+			Title:       book.Title,
+			Description: book.Description,
+			ImageUrl:    book.ImageURL,
+			ID:          id,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 	}
-	fmt.Fprintf(w, "Book %s updated successfully (%d row affected)\n", isbn, rowsAffected)
-	//
 }
 
 func unmarshalBook(r *http.Request) (book domain.Book, err error) {
@@ -86,15 +111,21 @@ func unmarshalBook(r *http.Request) (book domain.Book, err error) {
 	return book, err
 }
 
-func (b *BookHandler) deleteBook(w http.ResponseWriter, r *http.Request) {
-	//extract isbn first
-	isbn := r.URL.Query().Get("isbn")
-	//call delete service
-	rowsAffected, err := b.service.DeleteBook(isbn)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+func (b *BookHandler) DeleteBook() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//extract id first
+		idString := r.PathValue("id")
+		// convert to int
+		id, err := strconv.ParseInt(idString, 10, 64)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		//call delete service
+		err = b.service.DeleteBook(r.Context(), id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
-
-	fmt.Fprintf(w, "Book %s deleted successfully (%d row affected)\n", isbn, rowsAffected)
 }
