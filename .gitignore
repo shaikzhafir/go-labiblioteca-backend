@@ -20,3 +20,5 @@ setenv.sh
 .idea
 biblioteca.db
 cover.out
+tailwindcss
+bin

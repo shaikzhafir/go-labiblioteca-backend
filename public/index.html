@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <link href="/static/output.css" type="text/css" rel="stylesheet" />
+    <title>Biblioteca</title>
+  </head>
+  <body>
+    <div class="mt-14 flex flex-col items-center justify-center">
+      <p class="text-3xl">Biblioteca</p>
+      <div class="mt-14">
+        <button hx-get="/books"
+        hx-trigger="click"
+        hx-target="#books"
+        hx-swap="outerHTML" 
+        class="px-4 py-2 bg-blue-500 text-white rounded-md">Get Data</button>
+      </div>
+        <div id="books" class="mt-14"></div>
+    </div>
+  </body>
+</html>
