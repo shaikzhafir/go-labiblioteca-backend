@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io"
 	"labiblioteca/domain"
+	log "labiblioteca/logging"
 	"labiblioteca/service"
 	"labiblioteca/sqlcgen"
-	"log"
 	"net/http"
 	"strconv"
 	_ "strings"
@@ -24,14 +24,14 @@ func NewBookHandler(service *service.BookService) BookHandler {
 
 func (b *BookHandler) GetBooks() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("get books")
+		log.Info("GetBooks called")
 		bks, err := b.service.GetBooks(r.Context())
 		if err != nil {
 			fmt.Println("haha")
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(bks); err != nil {
-			log.Println(err)
+			log.Error(err.Error())
 		}
 	}
 }
@@ -52,7 +52,7 @@ func (b *BookHandler) GetBookByID() http.HandlerFunc {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(bks); err != nil {
-			log.Println(err)
+			log.Error(err.Error())
 		}
 	}
 }

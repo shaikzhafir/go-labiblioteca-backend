@@ -35,11 +35,17 @@ func run() error {
 	mux := http.NewServeMux()
 	// css and js files
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	// API routes
 	mux.HandleFunc("GET /books", handler.GetBooks())
 	mux.HandleFunc("POST /books", handler.InsertBook())
 	mux.HandleFunc("GET /books/{id}", handler.GetBookByID())
 	mux.HandleFunc("PUT /books/{id}", handler.UpdateBook())
 	mux.HandleFunc("DELETE /books/{id}", handler.DeleteBook())
+
+	// htmx routes
+	mux.HandleFunc("GET /htmx/books", handler.GetBooksPage())
+
+	// serve the html files
 	mux.Handle("/", http.FileServer(http.Dir("public")))
 
 	fmt.Println("server is running on port 4000 yeet")
