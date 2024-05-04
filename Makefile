@@ -3,7 +3,7 @@ generate:
 	cd sqlc; sqlc generate
 run:
 	@echo "Running..."
-	./run_dev.sh
+	source .env && ./run_dev.sh
 
 seed:
 	@echo "Seeding..."
